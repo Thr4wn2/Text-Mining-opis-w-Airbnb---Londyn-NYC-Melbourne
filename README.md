@@ -57,7 +57,7 @@ Pliki `*_small.csv` są już gotowe w repozytorium — nie trzeba pobierać oryg
 
 ### 3. Generowanie raportu HTML
 
-Otwórz `airbnb_text_mining.R` w RStudio i kliknij **Compile Report** (lub użyj skrótu `Ctrl+Shift+K`).
+Otwórz `Projekt_zaliczeniowy.R` w RStudio i kliknij **Compile Report** (lub użyj skrótu `Ctrl+Shift+K`).
 
 Raport HTML zostanie wygenerowany automatycznie z pełnym spisem treści, wykresami i komentarzami.
 
