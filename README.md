@@ -1,11 +1,11 @@
-# 🏠 Text Mining opisów Airbnb – Londyn, NYC, Melbourne
+#Text Mining opisów Airbnb – Londyn, NYC, Melbourne
 
 Projekt zaliczeniowy z przedmiotu Text Mining.  
 Autorzy: **Eliza Brzywczy, Jan Mikusek** | Data: czerwiec 2026
 
 ---
 
-## 📋 Opis projektu
+##Opis projektu
 
 Skrypt R przeprowadza analizę text mining opisów ofert Airbnb z trzech miast: **Londynu, Nowego Jorku i Melbourne**. Projekt identyfikuje słowa charakterystyczne dla każdego miasta, wykrywa ukryte tematy w opisach oraz analizuje różnice językowe między dzielnicami Nowego Jorku.
 
@@ -13,7 +13,7 @@ Wyniki prezentowane są w postaci interaktywnego raportu HTML z wykresami, chmur
 
 ---
 
-## 🔍 Zastosowane techniki
+##Zastosowane techniki
 
 | Technika | Opis |
 |---|---|
@@ -24,7 +24,7 @@ Wyniki prezentowane są w postaci interaktywnego raportu HTML z wykresami, chmur
 
 ---
 
-## 📁 Struktura repozytorium
+##  Struktura repozytorium
 
 ```
 ├── airbnb_text_mining.R     # główny skrypt analityczny
@@ -37,7 +37,7 @@ Wyniki prezentowane są w postaci interaktywnego raportu HTML z wykresami, chmur
 
 ---
 
-## ▶️ Jak uruchomić
+##  Jak uruchomić
 
 ### 1. Wymagania
 
@@ -54,11 +54,6 @@ install.packages(c(
 
 Pliki `*_small.csv` są już gotowe w repozytorium — nie trzeba pobierać oryginalnych dużych plików.
 
-Jeśli chcesz odtworzyć dane samodzielnie z oryginalnych plików Airbnb (`.csv.gz`), uruchom najpierw skrypt pomocniczy:
-
-```r
-source("przygotuj_dane.R")
-```
 
 ### 3. Generowanie raportu HTML
 
@@ -68,7 +63,7 @@ Raport HTML zostanie wygenerowany automatycznie z pełnym spisem treści, wykres
 
 ---
 
-## 📊 Wyniki analizy
+##  Wyniki analizy
 
 Raport zawiera:
 
@@ -81,31 +76,33 @@ Raport zawiera:
 
 ---
 
-## 📐 Specyfikacja wymagań
+##  Specyfikacja wymagań
 
 Projekt realizuje wymagania opisane w dokumencie **SRS (Software Requirements Specification)**:
 
-- ✅ Wczytanie danych z plików CSV z kodowaniem UTF-8
-- ✅ Usuwanie tagów HTML, URL, stopwords, znaków specjalnych i słów specyficznych dla Airbnb
-- ✅ Analiza częstości słów i macierz TDM
-- ✅ Wyznaczenie TF-IDF dla miast i dzielnic NYC
-- ✅ Modele LDA dla k=3, k=4, k=6
-- ✅ Wykresy beta (top słowa per temat) i gamma (rozkład przynależności)
-- ✅ Chmury słów, wykresy słupkowe, tabele
-- ✅ Obsługa pustych dokumentów po czyszczeniu tekstu
-- ✅ Obsługa brakujących wartości (`NA`)
+-  Wczytanie danych z plików CSV z kodowaniem UTF-8
+-  Usuwanie tagów HTML, URL, stopwords, znaków specjalnych i słów specyficznych dla Airbnb
+-  Analiza częstości słów i macierz TDM
+-  Wyznaczenie TF-IDF dla miast i dzielnic NYC
+-  Modele LDA dla k=3, k=4, k=6
+-  Wykresy beta (top słowa per temat) i gamma (rozkład przynależności)
+-  Chmury słów, wykresy słupkowe, tabele
+-  Obsługa pustych dokumentów po czyszczeniu tekstu
+-  Obsługa brakujących wartości (`NA`)
 
 ---
 
-## 🗂️ Dane źródłowe
+##  Dane źródłowe
 
 Dane pochodzą z serwisu [Inside Airbnb](http://insideairbnb.com/get-the-data/) — publicznie dostępne zbiory danych o ofertach Airbnb.  
 W projekcie użyto próbek po **1000 opisów** z każdego miasta (losowanie z `set.seed(42)`).
 
 ---
 
-## 📝 Uwagi techniczne
+##  Uwagi techniczne
 
 - Kolumna z dzielnicami pochodzi z pola `neighbourhood_cleansed` (ustandaryzowane przez Airbnb), a nie `host_neighbourhood` (wypełniane przez gospodarzy — często puste)
 - Analiza dzielnic NYC ograniczona do dzielnic z co najmniej 30 opisami
 - Interpretacja gamma: opisy Airbnb są z natury wielotematyczne (lokalizacja + wyposażenie + atmosfera), dlatego rozkład γ jest zbliżony między miastami — bardziej informatywne są wykresy β pokazujące słowa dominujące w każdym temacie
+
+Readme wykonane z pomocą Claude
