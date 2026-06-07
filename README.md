@@ -1,6 +1,6 @@
 #  Text Mining opisów Airbnb – Londyn, NYC, Melbourne
 
-Projekt zaliczeniowy z przedmiotu Text Mining.  
+Projekt zaliczeniowy z przedmiotu Projektowanie Systemów Informatycznych.  
 Autorzy: **Eliza Brzywczy (SRS), Jan Mikusek (Plik R)** | Data: czerwiec 2026
 ---
 
