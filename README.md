@@ -1,56 +1,111 @@
-#' # Zmiany względem skryptów z zajęć
-#'
-#' Poniżej zestawienie wszystkich modyfikacji wprowadzonych na potrzeby
-#' tego projektu w porównaniu do kodu omawianego na zajęciach.
-#'
-#' ## Dane i preprocessing
-#'
-#' - **Dane Airbnb zamiast pojedynczych plików tekstowych** – zamiast wczytywać
-#'   dokumenty z katalogu, wczytujemy trzy pliki CSV z opisami mieszkań
-#'   i losujemy próbkę 1000 opisów z każdego miasta (`sample_n`, `set.seed(42)`).
-#' - **Rozszerzone czyszczenie** – dodano usuwanie tagów HTML (`<br/>`, `<[^>]+>`),
-#'   adresów URL, znaków `@`, `~`, `|` oraz artefaktów złego kodowania (`â€`),
-#'   które są specyficzne dla danych Airbnb eksportowanych jako CSV.
-#' - **Własna lista stopwords Airbnb** – usunięto słowa zbyt ogólne dla tego
-#'   kontekstu: nazwy miast, "apartment", "bedroom", "can", "will" itp.
-#' - **Wyciągnięcie `cleaned_texts`** – po czyszczeniu zapisujemy teksty jako
-#'   wektor `cleaned_texts = sapply(corpus, ...)`. Na zajęciach tego nie było;
-#'   tu jest konieczne żeby LDA i TF-IDF działały na tych samych, czystych danych.
-#'
-#' ## Analiza częstości
-#'
-#' - **Podział na miasta** – dodano wykres top 15 słów osobno dla każdego miasta
-#'   (`facet_wrap`), na zajęciach był tylko widok globalny.
-#'
-#' ## TF-IDF
-#'
-#' - **TF-IDF per miasto z `tidytext`** – na zajęciach TF-IDF liczono globalnie
-#'   przez `weightTfIdf` w macierzy `tm`. Tu dodano podejście `bind_tf_idf`
-#'   z pakietu `tidytext`, które liczy TF-IDF traktując każde miasto jako
-#'   osobny "dokument zbiorczy" – dzięki temu wykres pokazuje słowa
-#'   charakterystyczne dla Londynu vs NYC vs Melbourne.
-#'
-#' ## LDA
-#'
-#' - **`reorder_within` zamiast `reorder`** – na zajęciach słowa na wykresach
-#'   `facet_wrap` nie były posortowane poprawnie wewnątrz każdego panelu.
-#'   `reorder_within` + `scale_x_reordered` z pakietu `tidytext` to naprawia.
-#' - **`k` jako parametr funkcji** – na zajęciach funkcja odwoływała się do
-#'   zmiennej globalnej `number_of_topics`. Zmieniono na normalny argument
-#'   z wartością domyślną `k = 4`.
-#' - **Wejście: `cleaned_texts` zamiast `data$text`** – kluczowa poprawka:
-#'   na zajęciach funkcja budowała nowy korpus od zera wewnątrz siebie,
-#'   przez co LDA widziało surowy tekst z HTML i stopwords. Tu przekazujemy
-#'   już wyczyszczone teksty.
-#' - **LDA osobno per miasto** – dodano pętlę porównującą tematy między miastami.
-#' - **Macierz gamma** – dodano analizę przynależności opisów do tematów
-#'   z poprawnym mapowaniem indeksów po usunięciu pustych dokumentów.
-#'
-#' ## Analiza dzielnic NYC
-#'
-#' - **Nowa sekcja: TF-IDF i LDA per dzielnica** – dodano analizę wyłącznie
-#'   dla NYC z podziałem na `host_neighbourhood`. Pozwala odpowiedzieć na pytanie
-#'   czy Manhattan, Brooklyn i inne dzielnice różnią się językiem opisów,
-#'   co daje konkretny wymiar analityczny niemożliwy przy samym podziale na miasta.
-#' - **Filtr minimalnej liczby opisów** – dzielnice z mniej niż 30 opisami są
-#'   pomijane, żeby TF-IDF i LDA miały wystarczająco dużo danych do sensownych wyników.
+# 🏠 Text Mining opisów Airbnb – Londyn, NYC, Melbourne
+
+Projekt zaliczeniowy z przedmiotu Text Mining.  
+Autorzy: **Eliza Brzywczy, Jan Mikusek** | Data: czerwiec 2026
+
+---
+
+## 📋 Opis projektu
+
+Skrypt R przeprowadza analizę text mining opisów ofert Airbnb z trzech miast: **Londynu, Nowego Jorku i Melbourne**. Projekt identyfikuje słowa charakterystyczne dla każdego miasta, wykrywa ukryte tematy w opisach oraz analizuje różnice językowe między dzielnicami Nowego Jorku.
+
+Wyniki prezentowane są w postaci interaktywnego raportu HTML z wykresami, chmurami słów i tabelami.
+
+---
+
+## 🔍 Zastosowane techniki
+
+| Technika | Opis |
+|---|---|
+| **Analiza częstości słów** | Top słowa globalnie i per miasto, chmury słów |
+| **TF-IDF** | Słowa charakterystyczne dla miast i dzielnic NYC |
+| **Topic Modeling (LDA)** | Wykrywanie ukrytych tematów dla k=3,4,6 |
+| **Analiza dzielnic NYC** | TF-IDF i LDA per dzielnica (Manhattan, Brooklyn itd.) |
+
+---
+
+## 📁 Struktura repozytorium
+
+```
+├── airbnb_text_mining.R     # główny skrypt analityczny
+├── przygotuj_dane.R         # skrypt do przygotowania małych plików CSV
+├── london_small.csv         # 1000 opisów z Londynu
+├── nyc_small.csv            # 1000 opisów z NYC
+├── melbourne_small.csv      # 1000 opisów z Melbourne
+└── README.md
+```
+
+---
+
+## ▶️ Jak uruchomić
+
+### 1. Wymagania
+
+R w wersji **4.0 lub nowszej** oraz następujące pakiety:
+
+```r
+install.packages(c(
+  "tm", "tidyverse", "tidytext", "topicmodels",
+  "wordcloud", "ggplot2", "RColorBrewer"
+))
+```
+
+### 2. Dane
+
+Pliki `*_small.csv` są już gotowe w repozytorium — nie trzeba pobierać oryginalnych dużych plików.
+
+Jeśli chcesz odtworzyć dane samodzielnie z oryginalnych plików Airbnb (`.csv.gz`), uruchom najpierw skrypt pomocniczy:
+
+```r
+source("przygotuj_dane.R")
+```
+
+### 3. Generowanie raportu HTML
+
+Otwórz `airbnb_text_mining.R` w RStudio i kliknij **Compile Report** (lub użyj skrótu `Ctrl+Shift+K`).
+
+Raport HTML zostanie wygenerowany automatycznie z pełnym spisem treści, wykresami i komentarzami.
+
+---
+
+## 📊 Wyniki analizy
+
+Raport zawiera:
+
+- **Chmury słów** — globalna i TF-IDF, pokazujące dominujące słowa w opisach
+- **Top 20 słów** — wykres słupkowy najczęstszych słów we wszystkich miastach
+- **TF-IDF per miasto** — co wyróżnia język opisów Londynu, NYC i Melbourne (np. *tube* w Londynie, *subway* w NYC, *tram* w Melbourne)
+- **LDA per miasto** — jakie tematy dominują w opisach każdego miasta (lokalizacja, wyposażenie, atmosfera)
+- **Analiza dzielnic NYC** — TF-IDF i LDA per dzielnica (Manhattan, Brooklyn, Williamsburg, Harlem i inne)
+- **Rozkład gamma** — prawdopodobieństwo przynależności opisów do tematów LDA
+
+---
+
+## 📐 Specyfikacja wymagań
+
+Projekt realizuje wymagania opisane w dokumencie **SRS (Software Requirements Specification)**:
+
+- ✅ Wczytanie danych z plików CSV z kodowaniem UTF-8
+- ✅ Usuwanie tagów HTML, URL, stopwords, znaków specjalnych i słów specyficznych dla Airbnb
+- ✅ Analiza częstości słów i macierz TDM
+- ✅ Wyznaczenie TF-IDF dla miast i dzielnic NYC
+- ✅ Modele LDA dla k=3, k=4, k=6
+- ✅ Wykresy beta (top słowa per temat) i gamma (rozkład przynależności)
+- ✅ Chmury słów, wykresy słupkowe, tabele
+- ✅ Obsługa pustych dokumentów po czyszczeniu tekstu
+- ✅ Obsługa brakujących wartości (`NA`)
+
+---
+
+## 🗂️ Dane źródłowe
+
+Dane pochodzą z serwisu [Inside Airbnb](http://insideairbnb.com/get-the-data/) — publicznie dostępne zbiory danych o ofertach Airbnb.  
+W projekcie użyto próbek po **1000 opisów** z każdego miasta (losowanie z `set.seed(42)`).
+
+---
+
+## 📝 Uwagi techniczne
+
+- Kolumna z dzielnicami pochodzi z pola `neighbourhood_cleansed` (ustandaryzowane przez Airbnb), a nie `host_neighbourhood` (wypełniane przez gospodarzy — często puste)
+- Analiza dzielnic NYC ograniczona do dzielnic z co najmniej 30 opisami
+- Interpretacja gamma: opisy Airbnb są z natury wielotematyczne (lokalizacja + wyposażenie + atmosfera), dlatego rozkład γ jest zbliżony między miastami — bardziej informatywne są wykresy β pokazujące słowa dominujące w każdym temacie
