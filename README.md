@@ -1,4 +1,4 @@
-#Text Mining opisów Airbnb – Londyn, NYC, Melbourne
+#  Text Mining opisów Airbnb – Londyn, NYC, Melbourne
 
 Projekt zaliczeniowy z przedmiotu Text Mining.  
 Autorzy: **Eliza Brzywczy, Jan Mikusek** | Data: czerwiec 2026
