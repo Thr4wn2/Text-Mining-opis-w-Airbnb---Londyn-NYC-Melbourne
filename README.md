@@ -5,7 +5,7 @@ Autorzy: **Eliza Brzywczy, Jan Mikusek** | Data: czerwiec 2026
 
 ---
 
-##Opis projektu
+##  Opis projektu
 
 Skrypt R przeprowadza analizę text mining opisów ofert Airbnb z trzech miast: **Londynu, Nowego Jorku i Melbourne**. Projekt identyfikuje słowa charakterystyczne dla każdego miasta, wykrywa ukryte tematy w opisach oraz analizuje różnice językowe między dzielnicami Nowego Jorku.
 
@@ -13,7 +13,7 @@ Wyniki prezentowane są w postaci interaktywnego raportu HTML z wykresami, chmur
 
 ---
 
-##Zastosowane techniki
+##  Zastosowane techniki
 
 | Technika | Opis |
 |---|---|
